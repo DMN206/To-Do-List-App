@@ -1,12 +1,12 @@
 package com.dmn206.todoapp.dao;
 
+import com.dmn206.todoapp.model.Prioridad;
 import com.dmn206.todoapp.model.Tarea;
 import com.dmn206.todoapp.util.ConexionBD;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TareaDaoImpl implements TareaDAO{
@@ -39,7 +39,35 @@ public class TareaDaoImpl implements TareaDAO{
 
     @Override
     public List<Tarea> obtenerTodas() {
-        return List.of();
+        String sql = "SELECT * FROM tareas;";
+        List<Tarea> tareas = new ArrayList<>();
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)){
+
+            // ResultSet es un objeto que representa el conjunto de resultados de una consulta SQL en una base de datos
+            ResultSet rs = preparedStatement.executeQuery();
+
+            /*
+            rs.next() -> Mueve el cursor una fila hacia abajo y devuelve:
+            true → si ha llegado a una fila con datos.
+            false → si ya no hay más filas.
+            */
+
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String titulo= rs.getString("titulo");
+                String contenido= rs.getString("contenido");
+                boolean completada = rs.getInt("completada") == 1;
+                LocalDateTime fechaCreacion = LocalDateTime.parse(rs.getString("fecha_creacion"));
+                Prioridad prioridad = Prioridad.valueOf(rs.getString("prioridad"));
+
+                Tarea tarea = new Tarea(id, titulo, contenido, completada, fechaCreacion, prioridad);
+                tareas.add(tarea);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tareas;
     }
 
     @Override
