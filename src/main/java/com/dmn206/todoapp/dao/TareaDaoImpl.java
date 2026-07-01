@@ -72,6 +72,28 @@ public class TareaDaoImpl implements TareaDAO{
 
     @Override
     public Tarea obtenerTarea(int id) {
+        String sql = "SELECT * FROM tareas WHERE id = ?;";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)){
+            preparedStatement.setInt(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if(rs.next()){
+                int idObtenido = rs.getInt("id");
+                String titulo= rs.getString("titulo");
+                String contenido= rs.getString("contenido");
+                boolean completada = rs.getInt("completada") == 1;
+                LocalDateTime fechaCreacion = LocalDateTime.parse(rs.getString("fecha_creacion"));
+                Prioridad prioridad = Prioridad.valueOf(rs.getString("prioridad"));
+
+                Tarea tarea = new Tarea(idObtenido, titulo, contenido, completada, fechaCreacion, prioridad);
+                return tarea;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            }
         return null;
     }
 
