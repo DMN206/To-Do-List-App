@@ -99,6 +99,16 @@ public class TareaDaoImpl implements TareaDAO{
 
     @Override
     public void eliminar(int id) {
+        String sql = "DELETE FROM tareas WHERE id = ?;";
+
+        try(PreparedStatement pr = conexion.prepareStatement(sql)){
+            pr.setInt(1, id);
+            pr.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+
+        }
 
     }
 
