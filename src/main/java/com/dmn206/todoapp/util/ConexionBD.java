@@ -35,7 +35,7 @@ public class ConexionBD {
                     "    contenido       TEXT NULL,\n" +
                     "    completada      INTEGER DEFAULT 0,\n" +
                     "    fecha_creacion  TEXT NOT NULL,\n" +
-                    "    prioridad       TEXT NOT NULL,\n" +
+                    "    prioridad       TEXT NOT NULL\n" +
                     "\n" +
                     "\n" +
                     ");";
