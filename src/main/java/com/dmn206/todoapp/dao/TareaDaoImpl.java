@@ -114,6 +114,21 @@ public class TareaDaoImpl implements TareaDAO{
 
     @Override
     public void actualizar(Tarea tarea) {
+        String sql = "UPDATE tareas SET titulo = ?, contenido = ?, completada = ?, fecha_creacion = ?, prioridad = ? WHERE id = ?;";
+
+        try(PreparedStatement pr = conexion.prepareStatement(sql)){
+            pr.setString(1, tarea.getTitulo());
+            pr.setString(2, tarea.getContenido());
+            pr.setInt(3, tarea.isCompletado() ? 1 : 0);
+            pr.setString(4, tarea.getFecha_creacion().toString());
+            pr.setString(5, tarea.getPrioridad().name());
+            pr.setInt(6, tarea.getId());
+
+            pr.executeUpdate();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
     }
 }
